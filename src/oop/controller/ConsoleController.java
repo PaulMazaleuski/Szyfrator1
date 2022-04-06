@@ -14,9 +14,9 @@ public class ConsoleController {
 
     public static final int SYMBOLS_COUNT = 25;
     public static final String APPLICATION_NAME = "CRYPTOR";
-    private Logger log = Logger.getInstance();
-    private DataDao dao = new FileDataDao();
-    private Cryptor cryptor = new CaesarCryptor();
+    private final Logger log = Logger.getInstance();
+    private final DataDao dao = new FileDataDao();
+    private final Cryptor cryptor = new CaesarCryptor();
     private CaesarBruteForce caesarBruteForce = new CaesarBruteForce();
 
 
@@ -36,7 +36,7 @@ public class ConsoleController {
         } while (true);
     }
 
-    private void callChoice(int choice) throws IOException {
+    private void callChoice(int choice){
         switch (choice) {
             case 1:
                 encryptData();
@@ -45,14 +45,19 @@ public class ConsoleController {
                 decryptData();
                 break;
             case 3:
-                String path = getPathToFile();
-                String incomingFile = dao.getData(path);
-                caesarBruteForce.decrypt(incomingFile, path);
+                bruteForce();
             default:
                 printColoredText("Make correct choice", ConsoleColored.RED);
 
         }
     }
+
+    private void bruteForce() {
+        String path = getPathToFile();
+        String incomingFile = dao.getData(path);
+        caesarBruteForce.decrypt(incomingFile, path);
+    }
+
     public void encryptData() {
         String path = getPathToFile();
         int key = getKey();
@@ -76,7 +81,7 @@ public class ConsoleController {
 
     private int getKey() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Path to file:");
+        System.out.println("Enter the key:");
         int keyData = 0;
         try{
             keyData = scanner.nextInt();

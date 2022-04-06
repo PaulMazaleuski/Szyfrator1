@@ -22,6 +22,6 @@ public class Logger {
     }
 
     public void Error(String text) {
-        System.out.println(ConsoleColored.RED + ": " + text + ConsoleColored.RESET);
+        System.out.println(ConsoleColored.RED + "Please, enter absolute path: " + text + ConsoleColored.RESET);
     }
 }
