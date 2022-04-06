@@ -2,10 +2,12 @@ package oop.controller;
 
 import oop.dao.DataDao;
 import oop.dao.FileDataDao;
+import oop.service.CaesarBruteForce;
 import oop.service.CaesarCryptor;
 import oop.service.Cryptor;
 import oop.service.Logger;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ConsoleController {
@@ -13,17 +15,17 @@ public class ConsoleController {
     public static final int SYMBOLS_COUNT = 25;
     public static final String APPLICATION_NAME = "CRYPTOR";
     private Logger log = Logger.getInstance();
-
     private DataDao dao = new FileDataDao();
     private Cryptor cryptor = new CaesarCryptor();
+    private CaesarBruteForce caesarBruteForce = new CaesarBruteForce();
 
-    public void printMainMenu() {
+
+    public void printMainMenu() throws IOException {
         printHeader();
-
         makeChoice();
     }
 
-    private void makeChoice() {
+    private void makeChoice() throws IOException {
         do{
             printMainChoiceMenu();
             Scanner scanner = new Scanner(System.in);
@@ -34,17 +36,54 @@ public class ConsoleController {
         } while (true);
     }
 
-    private void callChoice(int choice) {
+    private void callChoice(int choice) throws IOException {
         switch (choice) {
             case 1:
-                log.logInfo("Called 1");
+                encryptData();
                 break;
             case 2:
-                log.logInfo("Called 2");
+                decryptData();
                 break;
-            default: printColoredText("Make correct choice", ConsoleColored.RED);
+            case 3:
+                String path = getPathToFile();
+                String incomingFile = dao.getData(path);
+                caesarBruteForce.decrypt(incomingFile, path);
+            default:
+                printColoredText("Make correct choice", ConsoleColored.RED);
 
         }
+    }
+    public void encryptData() {
+        String path = getPathToFile();
+        int key = getKey();
+        String incomingFile = dao.getData(path);
+        cryptor.encrypt(incomingFile, key, path);
+    }
+
+    private void decryptData() {
+        String path = getPathToFile();
+        int key = getKey();
+        String incomingFile = dao.getData(path);
+        cryptor.decrypt(incomingFile, key, path);
+    }
+
+    private String getPathToFile() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Path to file:");
+        String path = scanner.nextLine();
+        return path;
+    }
+
+    private int getKey() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Path to file:");
+        int keyData = 0;
+        try{
+            keyData = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Incorrect key.");
+        }
+        return keyData;
     }
 
     private boolean isExitCodeChoose(int choise) {
@@ -58,8 +97,9 @@ public class ConsoleController {
     private void printMainChoiceMenu() {
         System.out.println();
         printColoredText("Make your choice", ConsoleColored.GREEN);
-        printColoredText("1: Encrypt file", ConsoleColored.YELLOW_BOLD);
+        printColoredText("1: Encrypt file", ConsoleColored.PURPLE);
         printColoredText("2: Decrypt file", ConsoleColored.PURPLE);
+        printColoredText("3: BruteForce", ConsoleColored.PURPLE);
         System.out.println();
         printColoredText("0: Exit", ConsoleColored.CYAN);
     }

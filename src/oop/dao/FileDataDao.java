@@ -11,22 +11,22 @@ public class FileDataDao implements DataDao{
     private Logger log = Logger.getInstance();
 
     @Override
-    public String getData(String dataName) {
+    public String getData(String incomingFile) {
         byte[] dataBytes = new byte[0];
         try {
-            dataBytes = Files.readAllBytes(Path.of(dataName));
+            dataBytes = Files.readAllBytes(Path.of(incomingFile));
         } catch (IOException e) {
-            log.logError(e.getMessage());
+            log.Error(e.getMessage());
         }
         return new String(dataBytes);
     }
 
     @Override
-    public void writeData(String dataName, String data) {
+    public void writeData(String incomingFile, int key, String path) {
        try{
-           Files.write(Path.of(dataName), data.getBytes());
+           Files.write(Path.of(path), incomingFile.getBytes());
        } catch (IOException e) {
-           log.logError(e.getMessage());
+           log.Error(e.getMessage());
        }
     }
 }

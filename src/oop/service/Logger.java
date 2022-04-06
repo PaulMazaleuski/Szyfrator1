@@ -16,12 +16,12 @@ public class Logger {
         return logger;
     }
 
-    public void logInfo(String text){
+    public void Info(String text){
         System.out.println(ConsoleColored.GREEN + ": " + text + ConsoleColored.RESET);
 
     }
 
-    public void logError(String text) {
+    public void Error(String text) {
         System.out.println(ConsoleColored.RED + ": " + text + ConsoleColored.RESET);
     }
 }

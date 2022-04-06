@@ -2,8 +2,8 @@ package oop.service;
 
 public interface Cryptor {
 
-    String encrypt(String data);
+    void encrypt(String incomingFile, int key, String path);
 
-    String decrypt(String data);
+    void decrypt(String incomingFile, int key, String path);
 
 }
