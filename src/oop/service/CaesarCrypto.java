@@ -1,7 +1,8 @@
 package oop.service;
 
-import oop.Abc;
 import oop.dao.FileDataDao;
+
+import java.util.stream.IntStream;
 
 public class CaesarCrypto implements Cryptor {
 
@@ -14,14 +15,14 @@ public class CaesarCrypto implements Cryptor {
         char[] chars = incomingFile.toCharArray();
         char[] copyChars = new char[chars.length];
         for (int i = 0; i < chars.length; i++) {
-            int alphabetCharPosition = ALPHABET.indexOf(chars[i]);
-            if (alphabetCharPosition >= 0) if (alphabetCharPosition + key <= ALPHABET.length())
-                if (alphabetCharPosition + key == ALPHABET.length()) copyChars[i] = ALPHABET.charAt(0);
+            int positionAbc = ALPHABET.indexOf(chars[i]);
+            if (positionAbc >= 0) if (positionAbc + key <= ALPHABET.length())
+                if (positionAbc + key == ALPHABET.length()) copyChars[i] = ALPHABET.charAt(0);
                 else {
-                    copyChars[i] = ALPHABET.charAt(alphabetCharPosition + key);
+                    copyChars[i] = ALPHABET.charAt(positionAbc + key);
                 }
             else {
-                copyChars[i] = ALPHABET.charAt(alphabetCharPosition + key - ALPHABET.length());
+                copyChars[i] = ALPHABET.charAt(positionAbc + key - ALPHABET.length());
             }
             else copyChars[i] = chars[i];
             fileDataDao.writeData(new String(copyChars), key, path);
@@ -32,6 +33,7 @@ public class CaesarCrypto implements Cryptor {
 
     @Override
     public String decrypt(String incomingFile, int key, String path) {
-        return encrypt(incomingFile, -key, path);
+
+       return encrypt(incomingFile, -key, path);
     }
 }
