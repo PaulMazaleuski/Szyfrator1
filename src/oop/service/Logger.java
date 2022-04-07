@@ -6,7 +6,7 @@ public class Logger {
 
     private static Logger logger;
 
-    private Logger() {
+    public Logger() {
 
     }
     public static Logger getInstance() {
@@ -16,7 +16,7 @@ public class Logger {
         return logger;
     }
 
-    public void Info(String text){
+    public void Info(String text, String green){
         System.out.println(ConsoleColored.GREEN + ": " + text + ConsoleColored.RESET);
 
     }

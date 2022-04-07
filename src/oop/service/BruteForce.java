@@ -1,6 +1,7 @@
 package oop.service;
 
 public interface BruteForce {
-    void decrypt(String incomingFile, String path);
+
+    void decryptBruteForce(String incomingFile, String path);
 
 }

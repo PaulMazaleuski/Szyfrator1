@@ -3,31 +3,26 @@ package oop.controller;
 import oop.dao.DataDao;
 import oop.dao.FileDataDao;
 import oop.service.CaesarBruteForce;
-import oop.service.CaesarCryptor;
+import oop.service.CaesarCrypto;
 import oop.service.Cryptor;
-import oop.service.Logger;
-
-import java.io.IOException;
 import java.util.Scanner;
 
 public class ConsoleController {
 
     public static final int SYMBOLS_COUNT = 25;
     public static final String APPLICATION_NAME = "CRYPTOR";
-    private final Logger log = Logger.getInstance();
     private final DataDao dao = new FileDataDao();
-    private final Cryptor cryptor = new CaesarCryptor();
-    private CaesarBruteForce caesarBruteForce = new CaesarBruteForce();
+    private final Cryptor cryptor = new CaesarCrypto();
+    private final CaesarBruteForce caesarBruteForce = new CaesarBruteForce();
 
 
-    public void printMainMenu() throws IOException {
+    public void printMainMenu() {
         printHeader();
         makeChoice();
     }
 
-    private void makeChoice() throws IOException {
-        do{
-            printMainChoiceMenu();
+    private void makeChoice() {
+        do{ printMainChoiceMenu();
             Scanner scanner = new Scanner(System.in);
             int choice  = scanner.nextInt();
             if (isExitCodeChoose(choice)) break;
@@ -52,12 +47,6 @@ public class ConsoleController {
         }
     }
 
-    private void bruteForce() {
-        String path = getPathToFile();
-        String incomingFile = dao.getData(path);
-        caesarBruteForce.decrypt(incomingFile, path);
-    }
-
     public void encryptData() {
         String path = getPathToFile();
         int key = getKey();
@@ -72,21 +61,26 @@ public class ConsoleController {
         cryptor.decrypt(incomingFile, key, path);
     }
 
+    private void bruteForce() {
+        String path = getPathToFile();
+        String incomingFile = dao.getData(path);
+        caesarBruteForce.decryptBruteForce(incomingFile, path);
+    }
+
     private String getPathToFile() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Path to file:");
-        String path = scanner.nextLine();
-        return path;
+        System.out.println(ConsoleColored.GREEN + "Absolut path to file:");
+        return scanner.nextLine();
     }
 
     private int getKey() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the key:");
+        System.out.println(ConsoleColored.GREEN + "Enter the key:" );
         int keyData = 0;
         try{
             keyData = scanner.nextInt();
         } catch (Exception e) {
-            System.out.println("Incorrect key.");
+            System.out.println(ConsoleColored.RED + "Incorrect key.");
         }
         return keyData;
     }
@@ -101,12 +95,12 @@ public class ConsoleController {
 
     private void printMainChoiceMenu() {
         System.out.println();
-        printColoredText("Make your choice", ConsoleColored.GREEN);
-        printColoredText("1: Encrypt file", ConsoleColored.PURPLE);
-        printColoredText("2: Decrypt file", ConsoleColored.PURPLE);
-        printColoredText("3: BruteForce", ConsoleColored.PURPLE);
+        printColoredText("  Make your choice", ConsoleColored.GREEN);
+        printColoredText("\t1: Encrypt file", ConsoleColored.PURPLE);
+        printColoredText("\t2: Decrypt file", ConsoleColored.PURPLE);
+        printColoredText("\t3: BruteForce", ConsoleColored.PURPLE);
         System.out.println();
-        printColoredText("0: Exit", ConsoleColored.CYAN);
+        printColoredText("\t0: Exit", ConsoleColored.CYAN);
     }
 
     private void printHeader() {
@@ -117,7 +111,7 @@ public class ConsoleController {
 
     private void printStars(){
         for (int i = 0; i < SYMBOLS_COUNT; i++) {
-            System.out.print("*");
+            System.out.print(ConsoleColored.YELLOW + "*");
         }
         System.out.println();
     }
